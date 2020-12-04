@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<appender name="SAVE-TO-FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${spring.test.log.dir}/StudentService.log
+		</File>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<FileNamePattern>${spring.test.log.dir}/testService%d{yyyy-MM-dd}_%i.log
+			</FileNamePattern>
+			<maxIndex>5</maxIndex>
+		</rollingPolicy>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<FileNamePattern>${spring.test.log.dir}/StudentService%d{yyyy-MM-dd}_%i.log
+			</FileNamePattern>
+			<maxFileSize>10MB</maxFileSize>
+			<totalSizeCap>50MB</totalSizeCap>
+			<maxHistory>5</maxHistory>
+		</rollingPolicy>
+		<encoder
+			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n
+			</Pattern>
+		</encoder>
+	</appender>
+	<appender name="console"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder
+			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n
+			</Pattern>
+		</encoder>
+	</appender>
+	<logger name="org.springframework.web" additivity="false"
+		level="ERROR">
+		<appender-ref ref="SAVE-TO-FILE" />
+	</logger>
+	<logger name="org.hibernate" additivity="false" level="ERROR">
+		<appender-ref ref="SAVE-TO-FILE" />
+	</logger>
+	<springProfile name="local">
+		<logger name="com.ust.training" level="INFO"
+			additivity="false">
+			<appender-ref ref="SAVE-TO-FILE" />
+			<appender-ref ref="console" />
+		</logger>
+	</springProfile>
+	<root>
+		<level value="INFO" />
+		<appender-ref ref="SAVE-TO-FILE" />
+	</root>
+</configuration>
