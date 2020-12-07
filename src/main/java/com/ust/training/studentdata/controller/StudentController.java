@@ -3,14 +3,13 @@
  * Project Name :StudentData
  * 
  */
+
 package com.ust.training.studentdata.controller;
 
 import javax.ws.rs.HttpMethod;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +27,6 @@ import com.ust.training.studentdata.model.Student;
 import com.ust.training.studentdata.service.StudentService;
 
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * StudentController is a controller class which contains post delete and get methods mapping
@@ -38,8 +36,6 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @RestController
-
-@Slf4j
 public class StudentController {
 
   @Autowired
@@ -50,73 +46,75 @@ public class StudentController {
    * PostMapping adds a new student and save the detail
    * 
    * @param studentDTO
-   * @return
+   * @return ResponseEntity of student
    */
 
-  @PostMapping("/student")
+  @PostMapping
   @SwaggerToken
   @ApiOperation(value = "Adding new student and save student detail",
       notes = "Returns 200 OK/204 NO_CONTENT", httpMethod = HttpMethod.POST)
+
   public ResponseEntity<Student> addStudentDetails(@RequestBody StudentDTO studentDTO) {
 
-    Student student = new Student();
-
-    BeanUtils.copyProperties(studentDTO, student);
-    String detail = studentService.saveStudentDetails(studentDTO);
+    log.debug("Begining the Post operation");
+    Student detail = studentService.saveStudentDetails(studentDTO);
     if (null != detail) {
       log.info("Status:200  Response:", detail);
       return new ResponseEntity<Student>(HttpStatus.CREATED);
     } else {
-      log.error("Status:204");
+      log.info("Status:204");
+      log.debug("Ending of post operation");
       return ResponseEntity.noContent().build();
     }
+
   }
 
   /***
    * DeleteMapping deleting an existing student
    * 
    * @param id
-   * @return
+   * @return ResponseEntity of student
    */
 
-  @DeleteMapping("/student/{id}")
+  @DeleteMapping("/{id}")
   @SwaggerToken
   @ApiOperation(value = "Deleting student by id", notes = "Returns 200 OK/204 NO_CONTENT",
       httpMethod = HttpMethod.DELETE)
-  public ResponseEntity<Student> deleteStudent(@PathVariable("id") String id) {
-    Student details = studentService.getStudentDetails(id);
-    if (null != details) {
-      studentService.deleteStudentDetails(id);
-      log.info("Status:200 deleted id:" + id + " Response:", details);
-      return ResponseEntity.ok(details);
-    } else {
-      log.error("Status:204 id:", id);
-      return ResponseEntity.noContent().build();
-    }
+
+  public ResponseEntity<String> deleteStudent(@PathVariable("id") String id) {
+
+    log.debug("Begining the Delete operation");
+    log.debug("Ending the Delete operation");
+    String details = studentService.deleteStudentDetails(id);
+    return ResponseEntity.ok(details);
   }
 
   /***
    * GetMapping for getting a student with a particular id
    * 
    * @param id
-   * @return
+   * @return ResponseEntity of studentDTO
    */
 
-  @GetMapping("/student/{id}")
+  @GetMapping("/{id}")
 
   @SwaggerToken
   @ApiOperation(value = "Getting student by id", notes = "Returns 200 OK/204 NO_CONTENT",
       httpMethod = HttpMethod.GET)
 
-  public ResponseEntity<Student> getStudent(@PathVariable("id") String id) {
-    Student details = studentService.getStudentDetails(id);
+  public ResponseEntity<StudentDTO> getStudent(@PathVariable("id") String id) {
+
+    log.debug("Begining the Get operation");
+    StudentDTO details = studentService.getStudentDetails(id);
     if (null != details) {
-      log.info("Status:200 id:" + id + " Response:", details);
+      log.debug("Status:200 id:" + id + " Response:", details);
       return ResponseEntity.ok(details);
     } else {
-      log.error("Status:204 id:", id);
+      log.debug("Ending of get operation");
+      log.info("Status:204 id:", id);
       return ResponseEntity.noContent().build();
     }
+
   }
 
 }

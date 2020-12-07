@@ -6,7 +6,7 @@
 		</File>
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-			<FileNamePattern>${spring.test.log.dir}/testService%d{yyyy-MM-dd}_%i.log
+			<FileNamePattern>${spring.test.log.dir}/StudentService%d{yyyy-MM-dd}_%i.log
 			</FileNamePattern>
 			<maxIndex>5</maxIndex>
 		</rollingPolicy>
@@ -40,8 +40,7 @@
 		<appender-ref ref="SAVE-TO-FILE" />
 	</logger>
 	<springProfile name="local">
-		<logger name="com.ust.training" level="INFO"
-			additivity="false">
+		<logger name="com.ust.training" level="INFO" additivity="false">
 			<appender-ref ref="SAVE-TO-FILE" />
 			<appender-ref ref="console" />
 		</logger>
